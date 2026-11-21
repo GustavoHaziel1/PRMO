@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MorfoSintaxe</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0d6efd">
+
+</head>
+<body>
+
+  <div class="formulario">
+  <form action="envia" method="POST">
+
+    <label for="emoji">Emoji:</label>
+    <input type="text" name="emoji" id="emoji">
+    <br>
+
+    <label for="significado">Significado:</label>
+    <input type="text" name="significado" id="significado">
+    <br>
+
+    <button type="submit">Salvar</button>
+
+  </form>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then(reg => console.log('SW registrado:', reg.scope))
+          .catch(err => console.error('Erro no SW:', err));
+      });
+    }
+  </script>
+</body>
+</html>
