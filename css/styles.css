@@ -150,3 +150,53 @@ button[type="submit"]:disabled {
 #btn-instalar:hover {
   background: var(--color2);
 }
+
+
+table {
+  width: 100%;
+  max-width: 720px;
+  margin-top: 24px;
+  border-collapse: collapse;
+  background: var(--white);
+  border-radius: var(--raio);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(38, 53, 38, 0.18);
+}
+
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  color: var(--white);
+  background: var(--color1);
+  font-size: 0.9rem;
+}
+
+td:first-child {
+  font-size: 1.5rem;
+  text-align: center;
+  width: 70px;
+}
+
+tbody tr:nth-child(even) { background: var(--input-bg); }
+tbody tr:hover { background: rgba(164, 219, 147, 0.25); }
+
+.btn-editar, .btn-excluir {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-editar  { color: var(--white); background: var(--color2); }
+.btn-excluir { color: #991b1b; background: #fee2e2; }
+
+@media (max-width: 520px) {
+  th, td { padding: 10px 8px; font-size: 0.9rem; }
+  td:last-child { white-space: nowrap; }
+}
