@@ -1,4 +1,4 @@
-const CACHE_NAME = 'MorfoSintaxe-v1';
+const CACHE_NAME = 'MorfoSintaxe-v3';
 
 const ARQUIVOS_PARA_CACHE = [
   '/',
