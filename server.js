@@ -25,6 +25,24 @@ app.get('/',async (req,res)=>{
     res.render("index",{termos:result.rows})
 })
 
+app.post("/add", async(req,res)=>{
+    const {emoji,significado}=req.body
+    const query=`
+    INSERT INTO termos(tipo,significado)
+    VALUES($1,$2)
+    `
+    const result=await pool.query(query,[emoji,significado])
+    if(result.rowCount>0){
+        res.send(`
+            <script>
+            alert("Termo adicionado ao dicionário")
+            window.location.href='/'
+            </script>
+            `)
+    }
+})
+
+
 app.listen(PORT,()=>{
     console.log(`rodando em: http://localhost:${PORT}`)
 })
