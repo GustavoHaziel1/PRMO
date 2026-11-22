@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar</title>
+</head>
+<body>
+ <form id="form-emoji" action="/edit/<%= termo.id %>" method="POST">
+
+    <label for="emoji">Emoji:</label>
+    <input
+        type="text"
+        name="termo"
+        id="emoji"
+        autocomplete="off"
+        value="<%= termo.tipo %>"
+    >
+
+    <label for="significado">Significado:</label>
+    <input
+        type="text"
+        name="significado"
+        id="significado"
+        autocomplete="off"
+        value="<%= termo.significado %>"
+    >
+
+    <button type="submit" id="btn-salvar">Salvar</button>
+    <button type="button" id="btn-cancelar">Cancelar edição</button>
+
+</form>
+</body>
+</html>
