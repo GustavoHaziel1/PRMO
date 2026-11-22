@@ -17,10 +17,10 @@ const { randomInt } = require('crypto');
 const crypto = require('crypto')
 
 
-app.get('/',(req,res)=>{
+app.get('/',async (req,res)=>{
     res.render("index")
 })
 
 app.listen(PORT,()=>{
-    console.log(`rodando em: https://localhost:${PORT}`)
+    console.log(`rodando em: http://localhost:${PORT}`)
 })
