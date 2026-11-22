@@ -15,3 +15,12 @@ require('dotenv').config()
 const PORT=process.env.PORT
 const { randomInt } = require('crypto');
 const crypto = require('crypto')
+
+
+app.get('/',(req,res)=>{
+    res.render("index")
+})
+
+app.listen(PORT,()=>{
+    console.log(`rodando em: https://localhost:${PORT}`)
+})
