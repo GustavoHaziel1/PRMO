@@ -21,14 +21,14 @@
       <label for="significado">Significado:</label>
       <input type="text" name="significado" id="significado" autocomplete="off">
 
-      <button type="submit" id="btn-salvar">Salvar</button>
+      <button type="submit" id="btn-salvar">Adicionar</button>
       <button type="button" id="btn-cancelar" hidden>Cancelar edição</button>
 
     </form>
   </div>
 
   <div class="lista">
-    <table>
+    <table border="1">
       <thead>
         <tr>
           <th>Emoji:</th>
@@ -36,8 +36,19 @@
           <th>Ações:</th>
         </tr>
       </thead>
-      <!-- As linhas são criadas pelo js/app.js -->
-      <tbody id="tabela-corpo"></tbody>
+      <tbody id="tabela-corpo">
+        <% termos.forEach(termo=>{%>
+          <tr>
+      
+            <td><%= termo.tipo %></td>
+            <td><%= termo.significado %></td>
+            <td>
+            <a href="">Editar</a>
+            <a href="">Excluir</a>
+            </td>
+    </tr>
+        <%})%>
+      </tbody>
     </table>
   </div>
 
