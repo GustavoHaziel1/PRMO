@@ -18,7 +18,11 @@ const crypto = require('crypto')
 
 
 app.get('/',async (req,res)=>{
-    res.render("index")
+    const query=`
+    SELECT * FROM termos
+    `
+    const result=await pool.query(query)
+    res.render("index",{termos:result.rows})
 })
 
 app.listen(PORT,()=>{
