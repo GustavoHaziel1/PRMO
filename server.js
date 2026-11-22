@@ -77,7 +77,22 @@ app.post('/edit/:id',async(req,res)=>{
             `)  
     }
 })
-
+app.post("/delete/:id",async(req,res)=>{
+    const id = req.params.id
+    const query=`
+    DELETE FROM termos
+    WHERE id = $1
+    `
+    const result=await pool.query(query,[id])
+    if(result.rowCount>0){
+        res.send(`
+            <script>
+            alert("Excluído!")
+            window.location.href='/'
+            </script>
+            `)
+    }
+})
 
 
 app.listen(PORT,()=>{

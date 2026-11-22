@@ -44,7 +44,9 @@
             <td><%= termo.significado %></td>
             <td>
             <a href="/edit/<%=termo.id%>">Editar</a>
-            <a href="">Excluir</a>
+            <form action="/delete/<%= termo.id %>" method="POST">
+            <button type="submit">Deletar</button>
+            </form>
             </td>
     </tr>
         <%})%>
