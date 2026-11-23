@@ -233,3 +233,63 @@ tr.vazio td {
   border-radius: 8px;
   cursor: pointer;
 }
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: var(--muted);
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--color2);
+  box-shadow: 0 0 0 3px rgba(101, 154, 87, 0.3);
+}
+
+/* Campo inválido (só depois de o usuário interagir) */
+input:user-invalid {
+  border-color: #dc2626;
+}
+
+/* Títulos do card */
+.titulo {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+  color: var(--color1);
+}
+
+.subtitulo {
+  margin: 0 0 16px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* Link para alternar entre login e registro */
+.link-alternativo {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.link-alternativo a {
+  font-weight: 600;
+  color: var(--color1);
+  text-decoration: none;
+}
+
+.link-alternativo a:hover {
+  text-decoration: underline;
+}
