@@ -293,3 +293,187 @@ input:user-invalid {
 .link-alternativo a:hover {
   text-decoration: underline;
 }
+
+/* ===== Adicione ao FINAL do css/styles.css ===== */
+
+/* ----- Ações dentro da tabela ----- */
+td.acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+td.acoes form {
+  margin: 0;
+}
+
+a.btn-editar {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* ----- Paginação ----- */
+.paginacao {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.paginacao a,
+.paginacao span {
+  min-width: 40px;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.paginacao a {
+  color: var(--color1);
+  text-decoration: none;
+  background: var(--white);
+  border: 1px solid var(--border);
+  transition: background 0.2s, color 0.2s;
+}
+
+.paginacao a:hover {
+  color: var(--white);
+  background: var(--color2);
+  border-color: var(--color2);
+}
+
+.paginacao a:focus-visible {
+  outline: 3px solid var(--color3);
+  outline-offset: 2px;
+}
+
+.paginacao .ativo {
+  color: var(--white);
+  background: var(--color1);
+  border: 1px solid var(--color1);
+}
+
+.paginacao .desativado {
+  color: var(--muted);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  opacity: 0.6;
+}
+
+.paginacao .reticencias {
+  min-width: auto;
+  padding: 8px 2px;
+  color: var(--muted);
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+    gap: 16px;
+    justify-content: flex-start;
+  }
+
+  .formulario {
+    padding: 22px 16px;
+  }
+
+  /* Tabela vira lista de cartões */
+  table,
+  thead,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  /* Esconde o cabeçalho, mas mantém acessível a leitores de tela */
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  table {
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  tbody tr {
+    margin-bottom: 12px;
+    padding: 6px 0;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--raio);
+    box-shadow: 0 4px 12px rgba(38, 53, 38, 0.12);
+  }
+
+  tbody tr:nth-child(even),
+  tbody tr:hover {
+    background: var(--white);
+  }
+
+  td,
+  td:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 14px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td:first-child {
+    font-size: 1.5rem;
+  }
+
+  td:last-child {
+    border-bottom: none;
+  }
+
+  td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Estado vazio não precisa do rótulo */
+  tr.vazio td::before {
+    content: none;
+  }
+
+  tr.vazio td {
+    justify-content: center;
+    text-align: center;
+  }
+
+  td.acoes {
+    justify-content: flex-end;
+  }
+
+  td.acoes::before {
+    margin-right: auto;
+  }
+
+  .btn-editar,
+  .btn-excluir {
+    padding: 10px 14px;
+  }
+
+  .paginacao a,
+  .paginacao span {
+    min-width: 36px;
+    padding: 8px 10px;
+  }
+}

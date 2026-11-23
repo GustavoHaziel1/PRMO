@@ -28,7 +28,7 @@
   </div>
 
   <div class="lista">
-    <table border="1">
+    <table>
       <thead>
         <tr>
           <th>Emoji:</th>
@@ -37,21 +37,65 @@
         </tr>
       </thead>
       <tbody id="tabela-corpo">
-        <% termos.forEach(termo=>{%>
+        <% if (termos.length === 0) { %>
+          <tr class="vazio">
+            <td colspan="3">Nenhum termo cadastrado ainda.</td>
+          </tr>
+        <% } %>
+
+        <% termos.forEach(termo => { %>
           <tr>
-      
-            <td><%= termo.tipo %></td>
-            <td><%= termo.significado %></td>
-            <td>
-            <a href="/edit/<%=termo.id%>">Editar</a>
-            <form action="/delete/<%= termo.id %>" method="POST">
-            <button type="submit">Deletar</button>
-            </form>
+            <td data-label="Emoji"><%= termo.tipo %></td>
+            <td data-label="Significado"><%= termo.significado %></td>
+            <td data-label="Ações" class="acoes">
+              <a class="btn-editar" href="/edit/<%= termo.id %>">Editar</a>
+              <form action="/delete/<%= termo.id %>" method="POST">
+                <button type="submit" class="btn-excluir">Deletar</button>
+              </form>
             </td>
-    </tr>
-        <%})%>
+          </tr>
+        <% }) %>
       </tbody>
     </table>
+
+    <% if (totalPaginas > 1) {
+         const inicio = Math.max(1, paginaAtual - 2);
+         const fim = Math.min(totalPaginas, paginaAtual + 2);
+    %>
+      <nav class="paginacao" aria-label="Paginação">
+
+        <% if (paginaAtual > 1) { %>
+          <a href="/?pagina=<%= paginaAtual - 1 %>" rel="prev" aria-label="Página anterior">&laquo;</a>
+        <% } else { %>
+          <span class="desativado" aria-hidden="true">&laquo;</span>
+        <% } %>
+
+        <% if (inicio > 1) { %>
+          <a href="/?pagina=1">1</a>
+          <% if (inicio > 2) { %><span class="reticencias">…</span><% } %>
+        <% } %>
+
+        <% for (let i = inicio; i <= fim; i++) { %>
+          <% if (i === paginaAtual) { %>
+            <span class="ativo" aria-current="page"><%= i %></span>
+          <% } else { %>
+            <a href="/?pagina=<%= i %>"><%= i %></a>
+          <% } %>
+        <% } %>
+
+        <% if (fim < totalPaginas) { %>
+          <% if (fim < totalPaginas - 1) { %><span class="reticencias">…</span><% } %>
+          <a href="/?pagina=<%= totalPaginas %>"><%= totalPaginas %></a>
+        <% } %>
+
+        <% if (paginaAtual < totalPaginas) { %>
+          <a href="/?pagina=<%= paginaAtual + 1 %>" rel="next" aria-label="Próxima página">&raquo;</a>
+        <% } else { %>
+          <span class="desativado" aria-hidden="true">&raquo;</span>
+        <% } %>
+
+      </nav>
+    <% } %>
   </div>
 
   <button id="btn-instalar" hidden>Instalar app</button>
