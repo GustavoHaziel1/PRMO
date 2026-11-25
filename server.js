@@ -16,6 +16,14 @@ const PORT=process.env.PORT
 const { randomInt } = require('crypto');
 const crypto = require('crypto')
 
+app.get('/',(req,res)=>{
+    res.render("login")
+})
+app.get('/register',(req,res)=>{
+    res.render("registro")
+})
+
+
 
 app.get('/inicio',async (req,res)=>{
     try {
