@@ -23,8 +23,23 @@ app.get('/register',(req,res)=>{
    res.render("registro")
 })
 app.post("/register",async(req,res)=>{
-    const{senha,senha2}=req.body
-    if(senha===senha2){
+    const {email}=req.body
+    const query1=`
+    SELECT * FROM usuarios
+    WHERE email =$1
+    `
+    const result1=await pool.query(query1,[email])
+    if(result1.rowCount>0){
+        res.send(`
+            <script>
+            alert("Usuário já cadastrado!")
+            window.location.href='/register'
+            </script>
+            `)
+    }
+    else{
+          const{senha,senha2}=req.body
+        if(senha===senha2){
         const{nome,email,senha}=req.body
         const query=`
         INSERT INTO usuarios(nome,email,senha)
@@ -40,6 +55,8 @@ app.post("/register",async(req,res)=>{
                 `)
         }
     }
+    }
+   
 })
 
 
