@@ -39,3 +39,5 @@ COMMENT ON COLUMN usuarios.email IS '📧 Email de acesso do usuário';
 COMMENT ON COLUMN usuarios.senha IS '🔐 Senha do usuário (preparada para hash bcrypt)';
 
 COMMENT ON COLUMN termos.usuario_id IS '👤 Identificador do usuário proprietário do termo';
+ALTER TABLE usuarios
+ADD COLUMN nome VARCHAR(150) NOT NULL;

@@ -20,9 +20,27 @@ app.get('/',(req,res)=>{
     res.render("login")
 })
 app.get('/register',(req,res)=>{
-    res.render("registro")
+   res.render("registro")
 })
-
+app.post("/register",async(req,res)=>{
+    const{senha,senha2}=req.body
+    if(senha===senha2){
+        const{nome,email,senha}=req.body
+        const query=`
+        INSERT INTO usuarios(nome,email,senha)
+        VALUES($1,$2,$3)
+        `
+        const result=await pool.query(query,[nome,email,senha])
+        if(result.rowCount>0){
+            res.send(`
+                <script>
+                alert("Usuário cadastrado com sucesso!")
+                window.location.href='/'
+                </script>
+                `)
+        }
+    }
+})
 
 
 app.get('/inicio',async (req,res)=>{
