@@ -28,11 +28,12 @@ app.get('/register',(req,res)=>{
 app.get('/inicio',async (req,res)=>{
     try {
     const limite = 10; //quantidade de itens por pag
-    const paginaAtual = Math.max(1, parseInt(req.query.pagina) || 1);
-    const offset = (paginaAtual - 1) * limite;
+    const paginaSolicitada = Math.max(1, parseInt(req.query.pagina) || 1);
     const countResult = await pool.query('SELECT COUNT(*) FROM termos');
     const totalRegistros = parseInt(countResult.rows[0].count, 10);
     const totalPaginas = Math.ceil(totalRegistros / limite);//tem q arredondar pra cima so funcionou assim
+    const paginaAtual = Math.min(paginaSolicitada, Math.max(1, totalPaginas));
+    const offset = (paginaAtual - 1) * limite;
     const query = `
       SELECT * FROM termos
       ORDER BY id DESC
@@ -61,7 +62,7 @@ app.post("/add", async(req,res)=>{
         res.send(`
             <script>
             alert("Termo adicionado ao dicionário")
-            window.location.href='/'
+            window.location.href='/inicio'
             </script>
             `)
     }
@@ -90,14 +91,14 @@ app.post('/edit/:id',async(req,res)=>{
         res.send(`
             <script>
                 alert("Editado com sucesso!")
-                window.location.href='/'
+                window.location.href='/inicio'
             </script>
             `)  
     }else{
             res.send(`
             <script>
                 alert("Erro ao editar")
-                window.location.href='/'
+                window.location.href='/inicio'
             </script>
             `)  
     }
@@ -113,7 +114,7 @@ app.post("/delete/:id",async(req,res)=>{
         res.send(`
             <script>
             alert("Excluído!")
-            window.location.href='/'
+            window.location.href='/inicio'
             </script>
             `)
     }
