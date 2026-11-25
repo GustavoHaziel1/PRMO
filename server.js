@@ -17,12 +17,29 @@ const { randomInt } = require('crypto');
 const crypto = require('crypto')
 
 
-app.get('/',async (req,res)=>{
-    const query=`
-    SELECT * FROM termos
-    `
-    const result=await pool.query(query)
-    res.render("index",{termos:result.rows})
+app.get('/inicio',async (req,res)=>{
+    try {
+    const limite = 10; //quantidade de itens por pag
+    const paginaAtual = Math.max(1, parseInt(req.query.pagina) || 1);
+    const offset = (paginaAtual - 1) * limite;
+    const countResult = await pool.query('SELECT COUNT(*) FROM termos');
+    const totalRegistros = parseInt(countResult.rows[0].count, 10);
+    const totalPaginas = Math.ceil(totalRegistros / limite);//tem q arredondar pra cima so funcionou assim
+    const query = `
+      SELECT * FROM termos
+      ORDER BY id DESC
+      LIMIT $1 OFFSET $2
+    `;
+    const result = await pool.query(query, [limite, offset]);
+    res.render('index', {
+      termos: result.rows,
+      paginaAtual,
+      totalPaginas
+    });
+  } catch (err) {
+    console.error('Erro ao buscar termos:', err);
+    res.status(500).send('Erro interno no servidor');
+  }
 })
 
 app.post("/add", async(req,res)=>{

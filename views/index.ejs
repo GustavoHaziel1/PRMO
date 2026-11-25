@@ -28,7 +28,7 @@
   </div>
 
   <div class="lista">
-    <table>
+    <table border="1">
       <thead>
         <tr>
           <th>Emoji:</th>
@@ -58,10 +58,10 @@
       </tbody>
     </table>
 
-    <% if (totalPaginas > 1) {
-         const inicio = Math.max(1, paginaAtual - 2);
-         const fim = Math.min(totalPaginas, paginaAtual + 2);
-    %>
+    <% if (totalPaginas > 1) {  %>
+         <% const inicio = Math.max(1, paginaAtual - 2); %>
+         <% const fim = Math.min(totalPaginas, paginaAtual + 2); %>
+
       <nav class="paginacao" aria-label="Paginação">
 
         <% if (paginaAtual > 1) { %>
