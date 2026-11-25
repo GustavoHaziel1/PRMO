@@ -19,6 +19,26 @@ const crypto = require('crypto')
 app.get('/',(req,res)=>{
     res.render("login")
 })
+app.post('/',async(req,res)=>{
+    const {email,senha}=req.body
+    const query=`
+    SELECT * FROM usuarios
+    WHERE email = $1
+    AND senha = $2
+    `
+    const result = await pool.query(query,[email,senha])
+    if(result.rowCount>0){
+        res.redirect("/inicio")
+    } else{
+        res.send(`
+            <script>
+            alert("Email ou senha incorreto!")
+            window.location.href='/'
+            </script>
+            `)
+    }
+})
+
 app.get('/register',(req,res)=>{
    res.render("registro")
 })
