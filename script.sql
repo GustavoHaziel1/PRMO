@@ -41,3 +41,9 @@ COMMENT ON COLUMN usuarios.senha IS '🔐 Senha do usuário (preparada para hash
 COMMENT ON COLUMN termos.usuario_id IS '👤 Identificador do usuário proprietário do termo';
 ALTER TABLE usuarios
 ADD COLUMN nome VARCHAR(150) NOT NULL;
+
+ALTER TABLE termos
+ADD CONSTRAINT fk_termos_usuarios
+FOREIGN KEY (usuario_id)
+REFERENCES usuarios(id)
+ON DELETE CASCADE;

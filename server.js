@@ -104,19 +104,21 @@ app.post("/register",async(req,res)=>{
 
 app.get('/inicio',auth,async (req,res)=>{
     try {
+    const id = req.usuario.id;
     const limite = 10; //quantidade de itens por pag
     const paginaSolicitada = Math.max(1, parseInt(req.query.pagina) || 1);
-    const countResult = await pool.query('SELECT COUNT(*) FROM termos');
+    const countResult = await pool.query('SELECT COUNT(*) FROM termos WHERE usuario_id = $1',[id]);
     const totalRegistros = parseInt(countResult.rows[0].count, 10);
     const totalPaginas = Math.ceil(totalRegistros / limite);//tem q arredondar pra cima so funcionou assim
     const paginaAtual = Math.min(paginaSolicitada, Math.max(1, totalPaginas));
     const offset = (paginaAtual - 1) * limite;
     const query = `
-      SELECT * FROM termos
-      ORDER BY id DESC
-      LIMIT $1 OFFSET $2
+    SELECT * FROM termos
+    WHERE usuario_id = $1
+    ORDER BY id DESC
+    LIMIT $2 OFFSET $3
     `;
-    const result = await pool.query(query, [limite, offset]);
+    const result = await pool.query(query, [id,limite, offset]);
     res.render('index', {
       termos: result.rows,
       paginaAtual,
@@ -128,13 +130,14 @@ app.get('/inicio',auth,async (req,res)=>{
   }
 })
 
-app.post("/add", async(req,res)=>{
+app.post("/add",auth, async(req,res)=>{
     const {emoji,significado}=req.body
+    const id = req.usuario.id;
     const query=`
-    INSERT INTO termos(tipo,significado)
-    VALUES($1,$2)
+    INSERT INTO termos(tipo,significado,usuario_id)
+    VALUES($1,$2,$3)
     `
-    const result=await pool.query(query,[emoji,significado])
+    const result=await pool.query(query,[emoji,significado,id])
     if(result.rowCount>0){
         res.send(`
             <script>
@@ -149,21 +152,21 @@ app.get('/edit/:id',auth,async(req,res)=>{
     const query=`
     SELECT * FROM termos
     WHERE 
-    id = $1
+    id = $1 and usuario_id=$2
     `
-    const result=await pool.query(query,[id])
+    const result=await pool.query(query,[id,req.usuario.id])
     res.render("edit",{termo:result.rows[0]})
 })
-app.post('/edit/:id',async(req,res)=>{
+app.post('/edit/:id',auth,async(req,res)=>{
     const id = req.params.id
     const{termo,significado} = req.body
     const query=`
     UPDATE termos
     SET tipo = $1, significado = $2
-    WHERE id = $3
+    WHERE id = $3 and usuario_id=$4
 
     `
-    const result=await pool.query(query, [termo, significado, id]);
+    const result=await pool.query(query, [termo, significado, id,req.usuario.id]);
     if(result.rowCount>0){
         res.send(`
             <script>
@@ -180,13 +183,14 @@ app.post('/edit/:id',async(req,res)=>{
             `)  
     }
 })
-app.post("/delete/:id",async(req,res)=>{
+app.post("/delete/:id",auth,async(req,res)=>{
     const id = req.params.id
     const query=`
     DELETE FROM termos
-    WHERE id = $1
+    WHERE id = $1 and usuario.id=$2
     `
-    const result=await pool.query(query,[id])
+    const result=await pool.query(query,[id,req.usuario.id])
+
     if(result.rowCount>0){
         res.send(`
             <script>
