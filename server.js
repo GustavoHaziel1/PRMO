@@ -20,25 +20,36 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 const auth = require('./middlewares/auth');
 
+
 app.get('/',(req,res)=>{
     res.render("login")
 })
 app.post('/',async(req,res)=>{
     const {email,senha}=req.body
     const query=`
-    SELECT * FROM usuarios
+        SELECT * FROM usuarios
     WHERE email = $1
-    AND senha = $2
+
     `
-    const result = await pool.query(query,[email,senha])
+    const result = await pool.query(query,[email])
+  
     if(result.rowCount>0){
         const usuario=result.rows[0]
-        const token=gerartoken(usuario.id)
+    
+        const senhaValida=await bcrypt.compare(
+            senha,
+            usuario.senha
+        )
+        if(senhaValida){
+            const token=gerartoken(usuario.id)
         res.cookie('token',token,{
             httpOnly: true,
             maxAge: 60 * 60 * 1000
         })
         res.redirect("/inicio")
+        }
+
+        
     } else{
         res.send(`
             <script>
@@ -71,11 +82,12 @@ app.post("/register",async(req,res)=>{
           const{senha,senha2}=req.body
         if(senha===senha2){
         const{nome,email,senha}=req.body
+        const senhaHash=await bcrypt.hash(senha,10)
         const query=`
         INSERT INTO usuarios(nome,email,senha)
         VALUES($1,$2,$3)
         `
-        const result=await pool.query(query,[nome,email,senha])
+        const result=await pool.query(query,[nome,email,senhaHash])
         if(result.rowCount>0){
             res.send(`
                 <script>
