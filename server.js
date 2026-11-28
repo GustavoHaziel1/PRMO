@@ -15,6 +15,10 @@ require('dotenv').config()
 const PORT=process.env.PORT
 const { randomInt } = require('crypto');
 const crypto = require('crypto')
+const gerartoken=require("./utils/token")
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+const auth = require('./middlewares/auth');
 
 app.get('/',(req,res)=>{
     res.render("login")
@@ -28,6 +32,12 @@ app.post('/',async(req,res)=>{
     `
     const result = await pool.query(query,[email,senha])
     if(result.rowCount>0){
+        const usuario=result.rows[0]
+        const token=gerartoken(usuario.id)
+        res.cookie('token',token,{
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000
+        })
         res.redirect("/inicio")
     } else{
         res.send(`
@@ -80,7 +90,7 @@ app.post("/register",async(req,res)=>{
 })
 
 
-app.get('/inicio',async (req,res)=>{
+app.get('/inicio',auth,async (req,res)=>{
     try {
     const limite = 10; //quantidade de itens por pag
     const paginaSolicitada = Math.max(1, parseInt(req.query.pagina) || 1);
@@ -122,7 +132,7 @@ app.post("/add", async(req,res)=>{
             `)
     }
 })
-app.get('/edit/:id',async(req,res)=>{
+app.get('/edit/:id',auth,async(req,res)=>{
     const id = req.params.id
     const query=`
     SELECT * FROM termos
