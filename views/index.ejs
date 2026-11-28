@@ -28,7 +28,7 @@
   </div>
 
   <div class="lista">
-    <table>
+    <table border="1">
       <thead>
         <tr>
           <th>Emoji:</th>
@@ -58,20 +58,20 @@
       </tbody>
     </table>
 
-    <% if (totalPaginas > 1) {
-         const inicio = Math.max(1, paginaAtual - 2);
-         const fim = Math.min(totalPaginas, paginaAtual + 2);
-    %>
+    <% if (totalPaginas > 1) {  %>
+         <% const inicio = Math.max(1, paginaAtual - 2); %>
+         <% const fim = Math.min(totalPaginas, paginaAtual + 2); %>
+
       <nav class="paginacao" aria-label="Paginação">
 
         <% if (paginaAtual > 1) { %>
-          <a href="/?pagina=<%= paginaAtual - 1 %>" rel="prev" aria-label="Página anterior">&laquo;</a>
+          <a href="/inicio?pagina=<%= paginaAtual - 1 %>" rel="prev" aria-label="Página anterior">&laquo;</a>
         <% } else { %>
           <span class="desativado" aria-hidden="true">&laquo;</span>
         <% } %>
 
         <% if (inicio > 1) { %>
-          <a href="/?pagina=1">1</a>
+          <a href="/inicio?pagina=1">1</a>
           <% if (inicio > 2) { %><span class="reticencias">…</span><% } %>
         <% } %>
 
@@ -79,17 +79,17 @@
           <% if (i === paginaAtual) { %>
             <span class="ativo" aria-current="page"><%= i %></span>
           <% } else { %>
-            <a href="/?pagina=<%= i %>"><%= i %></a>
+            <a href="/inicio?pagina=<%= i %>"><%= i %></a>
           <% } %>
         <% } %>
 
         <% if (fim < totalPaginas) { %>
           <% if (fim < totalPaginas - 1) { %><span class="reticencias">…</span><% } %>
-          <a href="/?pagina=<%= totalPaginas %>"><%= totalPaginas %></a>
+          <a href="/inicio?pagina=<%= totalPaginas %>"><%= totalPaginas %></a>
         <% } %>
 
         <% if (paginaAtual < totalPaginas) { %>
-          <a href="/?pagina=<%= paginaAtual + 1 %>" rel="next" aria-label="Próxima página">&raquo;</a>
+          <a href="/inicio?pagina=<%= paginaAtual + 1 %>" rel="next" aria-label="Próxima página">&raquo;</a>
         <% } else { %>
           <span class="desativado" aria-hidden="true">&raquo;</span>
         <% } %>

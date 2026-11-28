@@ -16,13 +16,94 @@ const PORT=process.env.PORT
 const { randomInt } = require('crypto');
 const crypto = require('crypto')
 
-
-app.get('/',async (req,res)=>{
+app.get('/',(req,res)=>{
+    res.render("login")
+})
+app.post('/',async(req,res)=>{
+    const {email,senha}=req.body
     const query=`
-    SELECT * FROM termos
+    SELECT * FROM usuarios
+    WHERE email = $1
+    AND senha = $2
     `
-    const result=await pool.query(query)
-    res.render("index",{termos:result.rows})
+    const result = await pool.query(query,[email,senha])
+    if(result.rowCount>0){
+        res.redirect("/inicio")
+    } else{
+        res.send(`
+            <script>
+            alert("Email ou senha incorreto!")
+            window.location.href='/'
+            </script>
+            `)
+    }
+})
+
+app.get('/register',(req,res)=>{
+   res.render("registro")
+})
+app.post("/register",async(req,res)=>{
+    const {email}=req.body
+    const query1=`
+    SELECT * FROM usuarios
+    WHERE email =$1
+    `
+    const result1=await pool.query(query1,[email])
+    if(result1.rowCount>0){
+        res.send(`
+            <script>
+            alert("Usuário já cadastrado!")
+            window.location.href='/register'
+            </script>
+            `)
+    }
+    else{
+          const{senha,senha2}=req.body
+        if(senha===senha2){
+        const{nome,email,senha}=req.body
+        const query=`
+        INSERT INTO usuarios(nome,email,senha)
+        VALUES($1,$2,$3)
+        `
+        const result=await pool.query(query,[nome,email,senha])
+        if(result.rowCount>0){
+            res.send(`
+                <script>
+                alert("Usuário cadastrado com sucesso!")
+                window.location.href='/'
+                </script>
+                `)
+        }
+    }
+    }
+   
+})
+
+
+app.get('/inicio',async (req,res)=>{
+    try {
+    const limite = 10; //quantidade de itens por pag
+    const paginaSolicitada = Math.max(1, parseInt(req.query.pagina) || 1);
+    const countResult = await pool.query('SELECT COUNT(*) FROM termos');
+    const totalRegistros = parseInt(countResult.rows[0].count, 10);
+    const totalPaginas = Math.ceil(totalRegistros / limite);//tem q arredondar pra cima so funcionou assim
+    const paginaAtual = Math.min(paginaSolicitada, Math.max(1, totalPaginas));
+    const offset = (paginaAtual - 1) * limite;
+    const query = `
+      SELECT * FROM termos
+      ORDER BY id DESC
+      LIMIT $1 OFFSET $2
+    `;
+    const result = await pool.query(query, [limite, offset]);
+    res.render('index', {
+      termos: result.rows,
+      paginaAtual,
+      totalPaginas
+    });
+  } catch (err) {
+    console.error('Erro ao buscar termos:', err);
+    res.status(500).send('Erro interno no servidor');
+  }
 })
 
 app.post("/add", async(req,res)=>{
@@ -36,7 +117,7 @@ app.post("/add", async(req,res)=>{
         res.send(`
             <script>
             alert("Termo adicionado ao dicionário")
-            window.location.href='/'
+            window.location.href='/inicio'
             </script>
             `)
     }
@@ -65,14 +146,14 @@ app.post('/edit/:id',async(req,res)=>{
         res.send(`
             <script>
                 alert("Editado com sucesso!")
-                window.location.href='/'
+                window.location.href='/inicio'
             </script>
             `)  
     }else{
             res.send(`
             <script>
                 alert("Erro ao editar")
-                window.location.href='/'
+                window.location.href='/inicio'
             </script>
             `)  
     }
@@ -88,7 +169,7 @@ app.post("/delete/:id",async(req,res)=>{
         res.send(`
             <script>
             alert("Excluído!")
-            window.location.href='/'
+            window.location.href='/inicio'
             </script>
             `)
     }
